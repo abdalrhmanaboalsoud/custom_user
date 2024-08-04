@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    Create Your Account
+                </div>
+                <div class="card-body">
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        {{ form.non_field_errors }}
+                        {% for field in form %}
+                            <div class="form-group mb-3">
+                                {{ field.label_tag }}
+                                {{ field }}
+                                {% if field.help_text %}
+                                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                                {% endif %}
+                                {% if field.errors %}
+                                    <div class="alert alert-danger mt-2">
+                                        {{ field.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                        <button type="submit" class="btn btn-success btn-block w-100 py-2">Sign Up</button>
+                    </form>
+                    <div class="text-center mt-3">
+                        <p class="text-muted mb-0">Already have an account?</p>
+                        <a href="{% url 'login' %}" class="text-primary">Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-group label {
+        font-weight: bold;
+        color: #555;
+    }
+
+    .form-control {
+        height: 45px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+        transition: background-color 0.3s, border-color 0.3s;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+        border-color: #218838;
+    }
+
+    .alert-danger {
+        font-size: 14px;
+    }
+
+    .text-muted {
+        font-size: 14px;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('form');
+        const submitButton = document.querySelector('button[type="submit"]');
+
+        form.addEventListener('submit', () => {
+            submitButton.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Loading...';
+            submitButton.setAttribute('disabled', 'true');
+        });
+
+        const inputs = document.querySelectorAll('.form-control');
+
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.classList.add('focus');
+            });
+
+            input.addEventListener('blur', () => {
+                if (input.value === '') {
+                    input.classList.remove('focus');
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

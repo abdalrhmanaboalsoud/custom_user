@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    Login to Your Account
+                </div>
+                <div class="card-body">
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        <div class="form-group mb-3">
+                            {{ form.username.label_tag }}
+                            {{ form.username }}
+                            {% if form.username.errors %}
+                                <div class="alert alert-danger mt-2">
+                                    {{ form.username.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group mb-3">
+                            {{ form.password.label_tag }}
+                            {{ form.password }}
+                            {% if form.password.errors %}
+                                <div class="alert alert-danger mt-2">
+                                    {{ form.password.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block w-100 py-2">Login</button>
+                    </form>
+                    <div class="text-center mt-3">
+                        <a href="{% url 'password_reset' %}" class="text-muted">Forgot Password?</a>
+                    </div>
+                    <div class="text-center mt-3">
+                        <p class="text-muted mb-0">Don't have an account?</p>
+                        <a href="{% url 'signup' %}" class="text-primary">Sign Up</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-group label {
+        font-weight: bold;
+        color: #555;
+    }
+
+    .form-control {
+        height: 45px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        transition: background-color 0.3s, border-color 0.3s;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+
+    .alert-danger {
+        font-size: 14px;
+    }
+
+    .text-muted {
+        font-size: 14px;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('form');
+        const submitButton = document.querySelector('button[type="submit"]');
+
+        form.addEventListener('submit', () => {
+            submitButton.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Loading...';
+            submitButton.setAttribute('disabled', 'true');
+        });
+
+        const inputs = document.querySelectorAll('.form-control');
+
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.classList.add('focus');
+            });
+
+            input.addEventListener('blur', () => {
+                if (input.value === '') {
+                    input.classList.remove('focus');
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}
